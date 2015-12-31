@@ -8,6 +8,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def json(body)
-  	JSON.parse(body)
+  	# turns { 'name' => 'foo' }
+  	# into { :name => 'foo' }
+  	JSON.parse(body, symbolize_names: true)
   end 
 end
