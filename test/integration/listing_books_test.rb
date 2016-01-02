@@ -13,7 +13,9 @@ class ListingBooksTest < ActionDispatch::IntegrationTest
   	assert_equal 200, response.status
   	assert_equal Mime::JSON, response.content_type 
 
-  	assert_equal Book.count, json(response.body).size
+    #byebug 
+    #can use :books symbol because we're using symbolize 
+  	assert_equal Book.count, json(response.body)[:books].size 
   	#parse returns an array, calling size on it 
   end 
 
@@ -23,6 +25,6 @@ class ListingBooksTest < ActionDispatch::IntegrationTest
     assert_equal 200, response.status
     assert_equal Mime::JSON, response.content_type
 
-    assert_equal 1, json(response.body).size
+    assert_equal 1, json(response.body)[:books].size
   end 
 end
