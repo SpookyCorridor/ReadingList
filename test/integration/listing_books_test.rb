@@ -3,8 +3,10 @@ require 'test_helper'
 class ListingBooksTest < ActionDispatch::IntegrationTest
 	setup do 
 		#create! raise an error if it doesn't work 
-		Book.create!(title: 'Pragmatic Programmer', rating: 5)
-		Book.create!(title: "Ender's game", rating: 4)
+    @scifi = Genre.create!(name: 'Science Fiction')
+
+		@scifi.books.create!(title: "Ender's game", rating: 4)
+    @scifi.books.create!(title: 'Star Trek', rating: 5)
 	end 
 	
   test 'listing books' do 
@@ -15,7 +17,12 @@ class ListingBooksTest < ActionDispatch::IntegrationTest
 
     #byebug 
     #can use :books symbol because we're using symbolize 
-  	assert_equal Book.count, json(response.body)[:books].size 
+    books = json(response.body)[:books]
+  	assert_equal Book.count, books.size 
+    book = Book.find(books.first[:id])
+
+    # using the defined model relationship 
+    assert_equal @scifi.id, book.genre.id 
   	#parse returns an array, calling size on it 
   end 
 
